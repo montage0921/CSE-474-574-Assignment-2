@@ -168,18 +168,49 @@ def nnObjFunction(params, *args):
     obj_val = 0
 
     # Your code here
-    #
-    #
-    #
-    #
-    #
+    N=training_data.shape[0] # number of training data
+ 
+    training_data=np.hstack((training_data,np.ones((N,1)))) # add bias
+
+    intput_to_hidden=np.dot(training_data,w1.T)
+    output_from_hidden=sigmoid(intput_to_hidden)
+
+    output_from_hidden=np.hstack((output_from_hidden,np.ones((output_from_hidden.shape[0],1)))) # add bias
+
+    input_to_class=np.dot(output_from_hidden,w2.T)
+    output=sigmoid(input_to_class)
+
+    #one hot encoding
+    y=np.zeros((N,n_class))
+    y[np.arange(N), training_label.astype(int)] = 1
+
+    # NLL loss function
+    obj_val=-np.sum(y*np.log(output)+(1-y)*np.log(1-output))/N
+
+    # with regularization
+    reg=(lambdaval/(2*N))*(np.sum(w1**2)+np.sum(w2**2))
+    obj_val+=reg
+
+    # calculate residual for output
+    residual_output=output-y
+
+    # calculate gradient for hidden to output layer
+    grad_w2=(np.dot(residual_output.T,output_from_hidden)+lambdaval*w2)/N
+
+    # calculate residual for hidden layer
+    residual_hidden = (1 - output_from_hidden[:, :-1]) * output_from_hidden[:, :-1] * np.dot(residual_output, w2[:, :-1])
+
+  
+    # calculate gradient for training to hidden layer
+    grad_w1=(np.dot(residual_hidden.T,training_data)+lambdaval*w1)/N
 
 
 
     # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     # you would use code similar to the one below to create a flat array
-    # obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
-    obj_grad = np.array([])
+    
+    obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
+    # obj_grad = np.array([]) 
 
     return (obj_val, obj_grad)
 
