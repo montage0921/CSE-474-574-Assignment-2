@@ -54,10 +54,69 @@ def preprocess():
 
     # Split the training sets into two sets of 50000 randomly sampled training examples and 10000 validation examples. 
     # Your code here.
+
+    # initialization
+    train_validation_data=[]
+    train_validation_labels=[]
+
+    # For Training and Validation
+    for digit in range(10):
+        # mat contain numpy array named as train0, train1,...train9 & test0,test1,...test9
+        key=f"train{digit}"
+        data=mat[key]
+        # labels is a vertical column with same number of rows of data, and fill it with digit
+        labels=np.full((data.shape[0],1),digit) 
+        
+        train_validation_data.append(data)
+        train_validation_labels.append(labels)
     
+    # merge all data and labels into one single set
+    train_validation_data=np.concatenate(train_validation_data)
+    train_validation_labels=np.concatenate(train_validation_labels)
+
+    # shuffle them
+    indices=np.random.permutation(train_validation_data.shape[0])
+    train_validation_data=train_validation_data[indices]
+    train_validation_labels=train_validation_labels[indices]
+
+    # split training set and validation set
+    # for data
+    train_data=train_validation_data[:50000]
+    validation_data=train_validation_data[50000:]
+    # for label
+    train_label=train_validation_labels[:50000]
+    validation_label=train_validation_labels[50000:]
+
+    # For Testing Data
+    test_data=[]
+    test_label=[]
+    for digit in range(10):
+        key=f"test{digit}"
+        data=mat[key]
+        label=np.full((data.shape[0],1),digit)
+        test_data.append(data)
+        test_label.append(label)
+    
+    test_data=np.concatenate(test_data)
+    test_label=np.concatenate(test_label)
+
+    # flatten labels
+    train_label=train_label.flatten()
+    validation_label=validation_label.flatten()
+    test_label=test_label.flatten()
 
     # Feature selection
     # Your code here.
+    diff_rows=np.diff(train_data,axis=0)
+    non_constant_col=np.any(diff_rows,axis=0) # boolean array to indicate if a column contain all same values
+
+    # select only non-constant columns
+    train_data=train_data[:,non_constant_col]
+    validation_data=validation_data[:,non_constant_col]
+    test_data=test_data[:,non_constant_col]
+
+    # save indices of feature that we used
+    selected_feature_indices = np.where(non_constant_col)[0]
 
     print('preprocess done')
 
