@@ -234,8 +234,22 @@ def nnPredict(w1, w2, data):
 
     labels = np.array([])
     # Your code here
+    N=data.shape[0]
+    data=np.hstack((data,np.ones((N,1)))) # add bias
 
+
+    input_to_hidden = np.dot(data, w1.T)
+    output_from_hidden = sigmoid(input_to_hidden)
+    
+    output_from_hidden = np.hstack((output_from_hidden, np.ones((output_from_hidden.shape[0], 1)))) # add bias
+    
+    input_to_output = np.dot(output_from_hidden, w2.T)
+    output = sigmoid(input_to_output)
+    
+    labels = np.argmax(output, axis=1)
+    
     return labels
+
 
 
 """**************Neural Network Script Starts here********************************"""
