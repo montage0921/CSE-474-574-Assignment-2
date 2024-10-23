@@ -264,10 +264,10 @@ if __name__ == "__main__":
     n_input = train_data.shape[1]
 
     # set the number of nodes in hidden unit (not including bias unit)
-    n_hidden = 50
+    n_hidden = 100 # MODIFIED, original=50
 
     # set the number of nodes in output unit
-    n_class = 10
+    n_class = 10 
 
     # initialize the weights into some random matrices
     initial_w1 = initializeWeights(n_input, n_hidden)
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
     # set the regularization hyper-parameter
-    lambdaval = 0
+    lambdaval = 0.01 # MODIFIED, original=0
 
     args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
