@@ -6,6 +6,8 @@ import numpy as np
 import pickle
 from scipy.optimize import minimize
 from math import sqrt
+import nnScrip_zhu
+import nnScript
 
 # Do not change this
 def initializeWeights(n_in,n_out):
@@ -27,13 +29,19 @@ def initializeWeights(n_in,n_out):
 
 # Replace this with your sigmoid implementation
 def sigmoid(z):
+    return nnScrip_zhu.sigmoid(z)
+    # return nnScript.sigmoid(z)
     
     
 # Replace this with your nnObjFunction implementation
 def nnObjFunction(params, *args):
+    return nnScrip_zhu.nnObjFunction(params,*args)
+    # return nnScript.nnObjFunction(params,*args)
     
 # Replace this with your nnPredict implementation
 def nnPredict(w1,w2,data):
+    return nnScrip_zhu.nnPredict(w1,w2,data)
+    # return nnScript.nnPredict(w1,w2,data)
 
 # Do not change this
 def preprocess():

@@ -63,7 +63,9 @@ def preprocess():
     vali_count = 0
     test_count = 0
     for i in range(10):
-        label = i+1
+        # label = i+1
+        label = i # should be 0-9, not 1-10
+
         key_train = 'train'
         key_test = 'test'
         key_train = key_train+ str(i)
@@ -152,8 +154,12 @@ def nnObjFunction(params, *args):
         # labels = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         labels=np.zeros(n_class) # change to non-hardcoded
 
-        labels[int(training_label[i])-1]=1
+        # labels[int(training_label[i])-1]=1
+        labels[int(training_label[i])]=1 # since label now becomes 0-9, no need to -1
+
         label_onehot[i] = labels
+
+
     error = -np.sum(label_onehot * np.log(o) + (1 - label_onehot) * np.log(1 - o))/n
     regularization = lambdaval* (np.dot(w1, w1.T).sum()+np.dot(w2,w2.T).sum())/2/n
     obj_val = error + regularization
@@ -198,12 +204,18 @@ def nnPredict(w1, w2, data):
 
     labels = np.empty([n])
     # Your code here
-
+   
+    
+   
     count = 0
     for i in o:
+        
         index = np.argmax(i)
-        labels[count] = index+1
+        # labels[count] = index+1
+        labels[count] = index # same, now it is 0-9
+        
         count=count+1
+     
 
     return labels
 
@@ -229,7 +241,7 @@ if __name__ == "__main__":
     initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
     # set the regularization hyper-parameter
-    lambdaval = 0
+    lambdaval = 0.01
 
     args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
