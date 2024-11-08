@@ -137,14 +137,21 @@ def nnObjFunction(params, *args):
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = 0
     n,img_size = training_data.shape
+
     x = np.hstack((training_data,np.ones((n,1))))
     c1 = sigmoid(np.dot(x,w1.T))
     c2 = np.hstack((c1, np.ones((n, 1))))
     o = sigmoid(np.dot(c2,w2.T))
     n = len(training_label)
-    label_onehot = np.empty([n,10])
+
+    # label_onehot = np.empty([n,10])
+    label_onehot = np.empty([n,n_class]) # change to non-hardcoded
+
     for i in range(n):
-        labels = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        
+        # labels = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        labels=np.zeros(n_class) # change to non-hardcoded
+
         labels[int(training_label[i])-1]=1
         label_onehot[i] = labels
     error = -np.sum(label_onehot * np.log(o) + (1 - label_onehot) * np.log(1 - o))/n
@@ -156,12 +163,7 @@ def nnObjFunction(params, *args):
     temp = np.dot(delta, w2)
     grad_w1 = np.dot((temp[:, 0:n_hidden] * (1 - c1) * c1).T, x)/ n+ lambdaval/n*w1
 
-
-
-
-
     # Your code here
-
 
     # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     # you would use code similar to the one below to create a flat array
@@ -214,7 +216,7 @@ if __name__ == "__main__":
     n_input = train_data.shape[1]
 
     # set the number of nodes in hidden unit (not including bias unit)
-    n_hidden = 50
+    n_hidden = 100
 
     # set the number of nodes in output unit
     n_class = 10
