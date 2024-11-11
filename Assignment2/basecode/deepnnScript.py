@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
 import pickle
+import time
 
 
 # Create model
@@ -22,17 +23,32 @@ def create_multilayer_perceptron():
             # Network Parameters
             n_hidden_1 = 256  # 1st layer number of features
             n_hidden_2 = 256  # 2nd layer number of features
+            n_hidden_3 = 256
+            n_hidden_4 = 256
+            n_hidden_5 = 256
+            n_hidden_6 = 256
+            n_hidden_7 = 256
             n_input = 2376  # data input
             n_classes = 2
 
             # Initialize network layers
             self.layer_1 = nn.Linear(n_input, n_hidden_1)
             self.layer_2 = nn.Linear(n_hidden_1, n_hidden_2)
-            self.out_layer = nn.Linear(n_hidden_2, n_classes)
+            self.layer_3 = nn.Linear(n_hidden_2, n_hidden_3)
+            self.layer_4 = nn.Linear(n_hidden_3, n_hidden_4)
+            self.layer_5 = nn.Linear(n_hidden_4, n_hidden_5)
+            self.layer_6 = nn.Linear(n_hidden_5, n_hidden_6)
+            self.layer_7 = nn.Linear(n_hidden_6, n_hidden_7)
+            self.out_layer = nn.Linear(n_hidden_7, n_classes)
 
         def forward(self, x):
             x = F.relu(self.layer_1(x))
             x = F.relu(self.layer_2(x))
+            x = F.relu(self.layer_3(x))
+            x = F.relu(self.layer_4(x))
+            x = F.relu(self.layer_5(x))
+            x = F.relu(self.layer_6(x))
+            x = F.relu(self.layer_7(x))
             x = self.out_layer(x)
             return x
 
@@ -130,8 +146,11 @@ test_dataloader = DataLoader(testset, batch_size=batch_size, shuffle=False)
 
 
 # Training cycle
+start_time=time.time()
 for t in range(training_epochs):
     print(f"Epoch {t+1}\n-------------------------------")
     train(train_dataloader, model, cost, optimizer)
 print("Optimization Finished!")
 test(test_dataloader, model, cost)
+total_duration = time.time() - start_time
+print(f"Total time cost: {total_duration:.2f} seconds")

@@ -6,8 +6,9 @@ import numpy as np
 import pickle
 from scipy.optimize import minimize
 from math import sqrt
-import nnScrip_zhu
-import nnScript
+import nnScript_fina
+import time
+
 
 # Do not change this
 def initializeWeights(n_in,n_out):
@@ -29,18 +30,18 @@ def initializeWeights(n_in,n_out):
 
 # Replace this with your sigmoid implementation
 def sigmoid(z):
-    return nnScrip_zhu.sigmoid(z)
+    return nnScript_fina.sigmoid(z)
     # return nnScript.sigmoid(z)
     
     
 # Replace this with your nnObjFunction implementation
 def nnObjFunction(params, *args):
-    return nnScrip_zhu.nnObjFunction(params,*args)
+    return nnScript_fina.nnObjFunction(params,*args)
     # return nnScript.nnObjFunction(params,*args)
     
 # Replace this with your nnPredict implementation
 def nnPredict(w1,w2,data):
-    return nnScrip_zhu.nnPredict(w1,w2,data)
+    return nnScript_fina.nnPredict(w1,w2,data)
     # return nnScript.nnPredict(w1,w2,data)
 
 # Do not change this
@@ -59,6 +60,7 @@ def preprocess():
     return train_x, train_y, valid_x, valid_y, test_x, test_y
 
 """**************Neural Network Script Starts here********************************"""
+start_time = time.time()
 train_data, train_label, validation_data, validation_label, test_data, test_label = preprocess()
 #  Train Neural Network
 # set the number of nodes in input unit (not including bias unit)
@@ -96,3 +98,5 @@ print('\n Validation set Accuracy:' + str(100*np.mean((predicted_label == valida
 predicted_label = nnPredict(w1,w2,test_data)
 #find the accuracy on Validation Dataset
 print('\n Test set Accuracy:' +  str(100*np.mean((predicted_label == test_label).astype(float))) + '%')
+end_time = time.time()
+print(f"Total Execution Time: {end_time - start_time:.2f} seconds")
